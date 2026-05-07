@@ -2,8 +2,10 @@ package controller
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
+	"net/http"
 
 	"github.com/mahipalpanwar-7/RestAPI-MongoDB/model"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -117,4 +119,12 @@ func getAllMovies() []primitive.M{
 
 	defer cur.Close(context.Background())
     return movies
+}
+
+// actual controller for all movies to be exported
+
+func GetMYAllMovies(w http.ResponseWriter, r *http.Request){
+	w.Header().Set("Content-Type","application/x-www-from-urlencode")
+	allMovies := getAllMovies()
+	json.NewEncoder(w).Encode(allMovies)
 }
