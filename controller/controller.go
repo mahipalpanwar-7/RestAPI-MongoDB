@@ -55,16 +55,41 @@ func insertOneMovie(movie model.Netflix) {
 
 // update one movie
 
-func updateOneMovie(movieID string){
-	id,_ := primitive.ObjectIDFromHex(movieID)
-	filter := bson.M{"_id":id}
-	update := bson.M{"$set": bson.M{"watched":true}}
+func updateOneMovie(movieID string) {
+	id, _ := primitive.ObjectIDFromHex(movieID)
+	filter := bson.M{"_id": id}
+	update := bson.M{"$set": bson.M{"watched": true}}
 
-	result, err := collection.UpdateOne(context.Background(),filter,update)
-	if err !=nil{
+	result, err := collection.UpdateOne(context.Background(), filter, update)
+	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Println("modified count:",result.ModifiedCount)
+	fmt.Println("modified count:", result.ModifiedCount)
 }
 
+// delete one record
+
+func deleteOneRecord(movieID string) {
+	id, _ := primitive.ObjectIDFromHex(movieID)
+	filter := bson.M{"_id": id}
+	deleteCount, err := collection.DeleteOne(context.Background(), filter)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("movie got deleted with delete count:", deleteCount)
+}
+
+// delete all records from mongoDB
+
+func deleteAllMovie() int64 {
+	// filter := bson.D{{}}  // {} all will be selected
+	deleteResult, err := collection.DeleteMany(context.Background(), bson.D{{}}, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("number of movies delete:", deleteResult.DeletedCount)
+	return deleteResult.DeletedCount
+}
