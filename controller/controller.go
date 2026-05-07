@@ -1,9 +1,11 @@
 package controller
 
 import (
+	"context"
 	"fmt"
 	"log"
 
+	"github.com/mahipalpanwar-7/RestAPI-MongoDB/model"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
@@ -36,4 +38,15 @@ func init() {
 	// collection instance
 
 	fmt.Println("collection instance is ready")
+}
+
+// Helper function , insert one record
+
+func insertOneMovie(movie model.Netflix) {
+	inserted, err := collection.InsertOne(context.Background(), movie)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("one movie inserted in database with id:", inserted.InsertedID)
 }
