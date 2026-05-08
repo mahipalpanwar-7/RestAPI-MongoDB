@@ -73,7 +73,7 @@ func updateOneMovie(movieID string) {
 
 // delete one record
 
-func deleteOneRecord(movieID string) {
+func deleteOneMovie(movieID string) {
 	id, _ := primitive.ObjectIDFromHex(movieID)
 	filter := bson.M{"_id": id}
 	deleteCount, err := collection.DeleteOne(context.Background(), filter)
@@ -154,5 +154,29 @@ func MarkAsWatched(w http.ResponseWriter, r *http.Request){
 	params := mux.Vars(r)
     updateOneMovie(params["id"])
 	json.NewEncoder(w).Encode(params["id"])
-	
+
 }
+
+// delete a movie
+
+func DeleteAMovie(w http.ResponseWriter , r *http.Request){
+	w.Header().Set("Content-Type","application/x-www-form-urlencode")
+	w.Header().Set("Allow-Control-Allow-Methods","DELETE")
+
+	params := mux.Vars(r)
+	deleteOneMovie(params["id"])
+	json.NewEncoder(w).Encode(params["id"])
+}
+
+
+// delete all movies 
+
+func DeleteAllMovie(w http.ResponseWriter , r *http.Request){
+	w.Header().Set("Content-Type","application/x-www-form-urlencode")
+	w.Header().Set("Allow-Control-Allow-Methods","DELETE")
+
+	
+	count := deleteAllMovie()
+	json.NewEncoder(w).Encode(count)
+}
+
